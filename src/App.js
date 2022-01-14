@@ -104,6 +104,7 @@ function App() {
                 className='btn btn--numbers selected' 
                 onClick={() => changeTheme('numbers')}
               >Numbers</button>
+              
               <button 
                 className='btn btn--icons' 
                 onClick={() => changeTheme('icons')}
