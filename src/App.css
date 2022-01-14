@@ -1,4 +1,153 @@
-.App {
+.start-menu {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--blue-1);
+}
+
+.start-menu__menu {
+  background-color: var(--white-1);
+  border-radius: 10px;
+}
+
+.start-menu__menu__theme__label,
+.start-menu__menu__num-players__label,
+.start-menu__menu__grid-size__label {
+  color: var(--blue-3);
+  font-weight: bold;
+}
+
+.start-menu__menu__theme__buttons,
+.start-menu__menu__num-players__buttons,
+.start-menu__menu__grid-size__buttons {
+  display: grid;
+}
+
+.start-menu__menu__num-players__buttons {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.start-menu__menu__theme__buttons,
+.start-menu__menu__grid-size__buttons {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.start-menu__menu__start {
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+}
+
+.btn {
+  border-radius: 25px;
+  border: none;
+  color: var(--white-1);
+  background-color: var(--blue-5);
+  font-weight: bold;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: var(--blue-4)
+}
+
+.btn--start {
+  background-color: var(--orange);
+}
+
+.btn--start:hover {
+  background-color: hsl(36, 100%, 65%);
+}
+
+.selected {
+  background-color: var(--blue-2)
+}
+
+
+@media screen and (min-width: 375px) {
+  .start-menu {
+    padding-top: 8rem;
+  }
+
+  .start-menu__logo {
+    margin-bottom: 4rem;
+  }
+
+  .start-menu__menu {
+    padding: 2rem 1.5rem;
+    width: 90%;
+    /* height: 50vh; */
+  }
+
+  .start-menu__menu__theme,
+  .start-menu__menu__num-players,
+  .start-menu__menu__grid-size {
+    margin-bottom: 1.5rem;
+  }
+
+  .start-menu__menu__theme__label,
+  .start-menu__menu__num-players__label,
+  .start-menu__menu__grid-size__label {
+    margin-bottom: 1rem;
+  }
+
+  .start-menu__menu__theme__buttons,
+  .start-menu__menu__num-players__buttons,
+  .start-menu__menu__grid-size__buttons {
+    column-gap: 0.75rem;
+  }
+  
+
+  .btn {
+    padding: 0.75rem 0;
+    font-size: 1.125rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .start-menu__menu {
+    padding: 3.25rem 3.5rem;
+    width: 80%;
+  }
+
+  .start-menu__menu__theme__label,
+  .start-menu__menu__num-players__label,
+  .start-menu__menu__grid-size__label {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+  }
+
+  .start-menu__menu__theme__buttons,
+  .start-menu__menu__num-players__buttons,
+  .start-menu__menu__grid-size__buttons {
+    column-gap: 1.25rem;
+  }
+
+  .btn {
+    padding: 0.65rem 0;
+    font-size: 1.35rem;
+  }
+
+  .btn--start {
+    border-radius: 30px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .start-menu__menu {
+    padding: 3.25rem 3.5rem;
+    width: 40%;
+  }
+
+  .btn--start {
+    border-radius: 30px;
+    padding: 1rem 0;
+  }
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -36,3 +185,4 @@
     transform: rotate(360deg);
   }
 }
+ */

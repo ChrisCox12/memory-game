@@ -1,4 +1,22 @@
-body {
+:root {
+  --blue-1: hsl(206, 45%, 15%);
+  --blue-2: hsl(205, 30%, 27%);
+  --blue-3: hsl(203, 22%, 55%);
+  --blue-4: hsl(205, 37%, 55%);
+  --blue-5: hsl(203, 28%, 79%);
+  --white-1: hsl(0, 0%, 99%);
+  --white-2: hsl(0, 0%, 95%);
+  --orange: hsl(37, 98%, 54%);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+}
+
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,4 +28,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
