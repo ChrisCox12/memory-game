@@ -1,4 +1,4 @@
-.start-menu {
+/* .start-menu {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -78,7 +78,6 @@
   .start-menu__menu {
     padding: 2rem 1.5rem;
     width: 90%;
-    /* height: 50vh; */
   }
 
   .start-menu__menu__theme,
@@ -146,7 +145,7 @@
     padding: 1rem 0;
   }
 }
-
+ */
 /* .App {
   text-align: center;
 }
