@@ -63,13 +63,13 @@ export default function StartMenu({ changeTheme, changeGridSize, changePlayers, 
                         <button 
                             className='btn btn--grid selected' 
                             id='grid_4' 
-                            onClick={() => changeGridSize('4x4')}
+                            onClick={() => changeGridSize(4)}
                         >4x4</button>
 
                         <button 
                             className='btn btn--grid' 
                             id='grid_6' 
-                            onClick={() =>changeGridSize('6x6')}
+                            onClick={() =>changeGridSize(6)}
                         >6x6</button>
                     </div>
                 </div>
