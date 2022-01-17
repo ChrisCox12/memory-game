@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import logo_1 from '../../assets/logo_1.svg';
+import GamePiece from '../GamePiece/GamePiece';
 import './Gameboard.css';
 
 export default function Gameboard({ theme, numPlayers, gridSize }) {
     const [moves, setMoves] =  useState(0);
     const [showMenu, setShowMenu] = useState(false);
+    const [gameState, setGameState] = useState([]);
     const [boardPieces, setBoardPieces] = useState(
         generateBoardPieces()
     );
