@@ -1,0 +1,49 @@
+.GamePiece {
+    /* width: 4rem;
+    height: 4rem; */
+    width: 100%;
+    height: 100%;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.GamePiece:hover {
+    cursor: pointer;
+}
+
+.GamePiece__piece--flipped {
+    width: 100%;
+    height: 100%;
+    background-color: var(--blue-5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.GamePiece__piece--not-flipped {
+    width: 100%;
+    height: 100%;
+    background-color: var(--blue-1);
+    border-radius: 50%;
+}
+
+.not-flipped {
+    background-color: var(--blue-1);
+    border-radius: 50%;
+}
+
+.flipped {
+    background-color: var(--orange);
+    border-radius: 50%;
+    color: var(--white-1);
+}
+
+.GamePiece__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

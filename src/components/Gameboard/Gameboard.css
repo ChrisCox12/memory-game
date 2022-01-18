@@ -17,8 +17,11 @@
 }
 
 .board--4x4 {
+    /* grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr); */
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 4rem);
+    gap: 1rem;
 }
 
 .board--6x6 {
