@@ -41,11 +41,15 @@ export default function GamePiece({
 
     useEffect(() => {
         /* const toReset = document.querySelectorAll('.flipped'); */
+        const toReset = document.getElementById(pieceIndex);
+
         if(reset) {
-            setFlipped(false);
-            setReset(false);
+            if(!toReset.classList.contains('matched')){
+                setFlipped(false);
+                setReset(false);
+            }    
         }
-    }, [reset, setReset]);
+    }, [reset, setReset, pieceIndex]);
 
     /* useEffect(() => {
         const f = document.querySelectorAll('.GamePiece__piece--flipped');

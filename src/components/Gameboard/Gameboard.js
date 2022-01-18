@@ -42,15 +42,27 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
         if(firstMove.index !== -1 && secondMove.index !== -1) {
             if(firstMove.value === secondMove.value) {
                 console.log('match');
+
+                f.forEach(item => {
+                    item.classList.add('matched');
+                    // item.setAttribute('disabled', '');
+                })
             }
             else {
+
                 console.log('no match');
+
                 setTimeout(() => {
                     f.forEach(item => {
-                        item.classList.remove('flipped');
-                        item.classList.add('not-flipped');
-                        setReset(true);
-                    })
+                        if(!item.classList.contains('matched')){
+                            item.classList.remove('flipped');
+                            item.classList.add('not-flipped');
+                            
+                        }
+                    });
+                    setReset(true);
+                    setFirstMove({value: -1, index: -1});
+                    setSecondMove({value: -1, index: -1});
                 }, 1500);
                 
                 /* f.forEach(item => {
