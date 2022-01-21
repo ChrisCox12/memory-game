@@ -4,7 +4,7 @@ import './GamePiece.css';
 export default function GamePiece({ 
     value, index, firstMove, setFirstMove, 
     secondMove, setSecondMove, assignMove, flippedPieces, setFlippedPieces,
-    unAssignMove, reset, setReset }) {
+    unAssignMove, reset, setReset, isFlipped, isMatched }) {
     const [pieceValue, setPieceValue] = useState('');
     const [pieceIndex, setPieceIndex] = useState(-1);
     const [flipped, setFlipped] = useState(false);
@@ -13,16 +13,18 @@ export default function GamePiece({
     useEffect(() => {
         setPieceValue(value);
         setPieceIndex(index);
+        setFlipped(isFlipped);
+        setPieceMatched(isMatched);
         /* console.log(`piece value: ${value}`); */
         /* console.log(`value: ${value}, index: ${index}`) */
-    }, [value, index]);
+    }, [value, index, isFlipped, isMatched]);
 
 
     useEffect(() => {
         const toFlip = document.getElementById(index);
 
 
-        if (flipped) {
+        if(flipped) {
             /* console.log('toFlip: ', toFlip);
             console.log('flipped'); */
 
@@ -37,7 +39,11 @@ export default function GamePiece({
             }
         }
 
-    }, [flipped, pieceIndex, index]);
+        if(pieceMatched) {
+            toFlip.classList.add('matched');
+        }
+
+    }, [flipped, pieceIndex, index, pieceMatched]);
 
     useEffect(() => {
         /* const toReset = document.querySelectorAll('.flipped'); */

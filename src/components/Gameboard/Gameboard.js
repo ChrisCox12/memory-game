@@ -7,28 +7,158 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
     const [moves, setMoves] =  useState(0);
     const [showMenu, setShowMenu] = useState(false);
     const [gameState, setGameState] = useState([]);
-    const [firstMove, setFirstMove] = useState({ value: -1, index: -1});
-    const [secondMove, setSecondMove] = useState({value: -1, index: -1});
+    const [firstMove, setFirstMove] = useState({ value: -1, index: -1 });
+    const [secondMove, setSecondMove] = useState({ value: -1, index: -1 });
     const [reset, setReset] = useState(false);
     const [flippedPieces, setFlippedPieces] = useState(0);
-    const [boardPieces, setBoardPieces] = useState(
+    const [score, setScore] = useState(0);
+    const [seconds, setSeconds] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+    const [active, setActive] = useState(false);
+    const [boardPieces, setBoardPieces] = useState([]);
+    /* const [boardPieces, setBoardPieces] = useState(
         generateBoardPieces()
-    );
+    ); */
+
+    /*
+        gamesState: 
+            boardPieces: []
+            time: number
+            moves: number
+    */
 
     useEffect(() => {
-        /* console.log(`effect: ${boardPieces}`) */
+        const storedGameState = JSON.parse( localStorage.getItem('gameState') );
+
+        if(storedGameState !== null) {
+            setBoardPieces(storedGameState.gameState);
+            setMoves(storedGameState.moves);
+            setMinutes(storedGameState.time.minutes);
+            setSeconds(storedGameState.time.seconds);
+            setGameState(storedGameState.gameState);
+            
+        }
+        else {
+            let values = [];
+            let toSet = [];
+            let nums = [];
+            let rand = 0;
+
+            // generate state 
+            if(gridSize === 4) {
+                if(theme === 'numbers') {
+                    /* while(nums.length < 8) {
+                        rand = Math.floor(Math.random() * 8);
+
+                        if(!nums.includes(rand)) {
+                            nums.push(rand);
+                        }
+                    } */
+                    for(let x = 0; x < 8; x++){
+                        nums.push(x);
+                    }
+
+                    values = [...nums, ...nums];
+
+                    // for randomizing the array
+                    values.sort(() => Math.random() - 0.5);
+
+                    for(let i = 0; i < 16; i++) {
+                        toSet.push({
+                            value: values[i],
+                            index: i,
+                            flipped: false,
+                            matched: false
+                        });
+                    }
+                }
+                else {
+                    // icons
+                }
+            }
+            else {
+                if(theme === 'numbers') {
+                    /* while(nums.length < 16) {
+                        rand = Math.floor(Math.random() * 16);
+
+                        if(!nums.includes(rand)) {
+                            nums.push(rand);
+                        }
+                    } */
+
+                    for(let x = 0; x < 16; x++) {
+                        nums.push(x);
+                    }
+
+                    values = [...nums, ...nums];
+
+                    values.sort(() => Math.random() - 0.5);
+
+                    for(let i = 0; i < 32; i++) {
+                        toSet.push({
+                            value: values[i],
+                            index: i,
+                            flipped: false,
+                            matched: false
+                        });
+                    }
+                }
+                else {
+                    // icons
+                }
+            }
+
+            setBoardPieces(toSet);
+            setGameState(toSet);
+        }
+
+        console.log('stored game state: ', storedGameState)
+    }, []);
+
+    useEffect(() => {
+        if(active) {
+            setTimeout(() => {
+                if(seconds === 59) {
+                    const nM = minutes + 1;
+                    setSeconds(0);
+                    setMinutes(nM);
+                }
+                else {
+                    const nS = seconds + 1;
+                    setSeconds(nS);
+                }
+
+                const gameStateToSave = {
+                    gameState: gameState,
+                    time: {
+                        minutes: minutes,
+                        seconds: seconds
+                    },
+                    moves: moves
+                };
+
+                localStorage.setItem('gameState', JSON.stringify(gameStateToSave))
+            }, 1000);
+        } 
+        
+    }, [seconds, minutes, active, gameState, moves]);
+
+    /* useEffect(() => {
+        // console.log(`effect: ${boardPieces}`)
         let state = [];
-        boardPieces.forEach(piece => {
+
+        boardPieces.forEach((piece, index) => {
             state.push({
                 value: piece,
+                index: index,
                 flipped: false,
                 matched: false
             });
         });
-        /* console.log(`state: ${JSON.stringify(state)}`) */
+        // console.log(`state: ${JSON.stringify(state)}`)
         setGameState(state);
-        /* console.log(`Game state: ${JSON.stringify(state)}`) */
-    }, [boardPieces]);
+        // console.log(`Game state: ${JSON.stringify(state)}`)
+    }, [boardPieces]); */
 
     useEffect(() => {
         /* const f = document.querySelectorAll('.GamePiece__piece--flipped'); */
@@ -46,7 +176,15 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                 f.forEach(item => {
                     item.classList.add('matched');
                     // item.setAttribute('disabled', '');
-                })
+                });
+
+                /* console.log(gameState[0]) */
+                gameState[firstMove.index].matched = true;
+                gameState[secondMove.index].matched = true;
+                gameState[firstMove.index].flipped = true;
+                gameState[secondMove.index].flipped = true;
+                /* boardPieces[firstMove.index].matched = true;
+                boardPieces[secondMove.index].matched = true; */
             }
             else {
 
@@ -75,18 +213,18 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
         }
         /* console.log(f[0]) */
 
-    }, [firstMove, secondMove]);
+    }, [firstMove, secondMove, gameState]);
 
-    function generateBoardPieces() {
+    /* function generateBoardPieces() {
         if(gridSize === 4) {
             return generatePieces4();
         }
         else {
             return generatePieces6();
         }
-    }
+    } */
 
-    function generatePieces4() {
+    /* function generatePieces4() {
         let toReturn = [];
 
         if(theme === 'numbers') {
@@ -106,11 +244,12 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
             toReturn.sort(() => Math.random() - 0.5);
         }
 
-        /* console.log(`toReturn: ${toReturn}`) */
-        return toReturn;
-    }
 
-    function generatePieces6() {
+        console.log(`toReturn: ${toReturn}`)
+        return toReturn;
+    } */
+
+    /* function generatePieces6() {
         let toReturn = [];
 
         if(theme === 'numbers') {
@@ -125,11 +264,14 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
             }
 
             toReturn = [...nums, ...nums];
+
+            // for randomizing the array
+            toReturn.sort(() => Math.random() - 0.5);
         }
 
-        /* console.log(`toReturn: ${toReturn}`) */
+        console.log(`toReturn: ${toReturn}`)
         return toReturn;
-    }
+    } */
 
     function toggleOverlay() {
         setShowMenu(!showMenu);
@@ -138,6 +280,9 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
     function assignMove(move) {
         console.log('firstMove: ', firstMove);
         console.log('move: ', move)
+
+        const n_M = moves + 1;
+        setMoves(n_M);
         
         if(firstMove.index === move.index) {
             setFirstMove({value: -1, index: -1});
@@ -151,6 +296,9 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
             }
         }
 
+        if(!active){
+            setActive(true);
+        }
         /* if(firstMove.value === -1) {
             setFirstMove(move);
             console.log('first move: ' , move);
@@ -231,7 +379,7 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                     {boardPieces.map((piece, index) => {
                         return (
                             <GamePiece 
-                                value={piece} 
+                                value={piece.value} 
                                 key={index} 
                                 index={index}
                                 firstMove={firstMove}
@@ -244,6 +392,8 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                                 unAssignMove={unAssignMove}
                                 reset={reset}
                                 setReset={setReset}
+                                isFlipped={piece.flipped}
+                                isMatched={piece.matched}
                             />
                         );
                     })}
@@ -254,10 +404,30 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                 <div>6x6 grid</div>
             }
 
+            <div className='Gameboard__stats'>
+                <div className='Gameboard__stats__time-counter'>
+                    <div className='Gameboard__stats__time-counter__title'>Time</div>
+
+                    <div className='Gameboard__stats__time-counter__time'>
+                        {minutes > 0 ? 
+                            <>{minutes}:{seconds}</> 
+                            : <>{seconds}</>
+                        }
+                    </div>
+                </div>
+
+                <div className='Gameboard__stats__move-counter'>
+                    <div className='Gameboard__stats__move-counter__title'>Moves</div>
+
+                    <div className='Gameboard__stats__move-counter__moves'>{moves}</div>
+                </div>
+            </div>
             <button onClick={() => console.log(firstMove)}>First Move</button>
             <button onClick={() => console.log(secondMove)}>Second Move</button>
             <button onClick={() => console.log(flippedPieces)}>Flipped Pieces</button>
             <button onClick={() => console.log(reset)}>Reset</button>
+            <button onClick={() => console.log(gameState)}>GameState</button>
+            <button onClick={() => console.log(boardPieces)}>BoardPieces</button>
         </div>
     )
 }

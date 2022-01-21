@@ -16,6 +16,20 @@
     display: grid;
 }
 
+.Gameboard__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+}
+
+.Gameboard__stats__time-counter, 
+.Gameboard__stats__move-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .board--4x4 {
     /* grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr); */
