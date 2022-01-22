@@ -2,6 +2,23 @@ import React, { useState, useEffect } from 'react';
 import logo_1 from '../../assets/logo_1.svg';
 import GamePiece from '../GamePiece/GamePiece';
 import './Gameboard.css';
+import ambulance from '../../assets/Font Awesome Icons/ambulance-solid.svg';
+import bug from '../../assets/Font Awesome Icons/bug-solid.svg';
+import crow from '../../assets/Font Awesome Icons/crow-solid.svg';
+import fish from '../../assets/Font Awesome Icons/fish-solid.svg';
+import fort from '../../assets/Font Awesome Icons/fort-awesome-brands.svg';
+import gamepad from '../../assets/Font Awesome Icons/gamepad-solid.svg';
+import hamburger from '../../assets/Font Awesome Icons/hamburger-solid.svg';
+import helicopter from '../../assets/Font Awesome Icons/helicopter-solid.svg';
+import infinity from '../../assets/Font Awesome Icons/infinity-solid.svg';
+import magnet from '../../assets/Font Awesome Icons/magnet-solid.svg';
+import pizza from '../../assets/Font Awesome Icons/pizza-slice-solid.svg';
+import plane from '../../assets/Font Awesome Icons/plane-solid.svg';
+import plug from '../../assets/Font Awesome Icons/plug-solid.svg';
+import screwdriver from '../../assets/Font Awesome Icons/screwdriver-solid.svg';
+import spider from '../../assets/Font Awesome Icons/spider-solid.svg';
+import viruses from '../../assets/Font Awesome Icons/viruses-solid.svg';
+
 
 export default function Gameboard({ theme, numPlayers, gridSize }) {
     const [moves, setMoves] =  useState(0);
@@ -36,75 +53,90 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
             setMinutes(storedGameState.time.minutes);
             setSeconds(storedGameState.time.seconds);
             setGameState(storedGameState.gameState);
-            
         }
         else {
             let values = [];
             let toSet = [];
             let nums = [];
-            let rand = 0;
+            let icons = [];
 
             // generate state 
             if(gridSize === 4) {
                 if(theme === 'numbers') {
-                    /* while(nums.length < 8) {
-                        rand = Math.floor(Math.random() * 8);
-
-                        if(!nums.includes(rand)) {
-                            nums.push(rand);
-                        }
-                    } */
-                    for(let x = 0; x < 8; x++){
+                    for(let x = 0; x < 8; x++) {
                         nums.push(x);
                     }
 
                     values = [...nums, ...nums];
-
-                    // for randomizing the array
-                    values.sort(() => Math.random() - 0.5);
-
-                    for(let i = 0; i < 16; i++) {
-                        toSet.push({
-                            value: values[i],
-                            index: i,
-                            flipped: false,
-                            matched: false
-                        });
-                    }
                 }
                 else {
-                    // icons
+                    icons = [
+                        ambulance,
+                        bug,
+                        crow,
+                        fish,
+                        fort,
+                        gamepad,
+                        hamburger,
+                        helicopter
+                    ];
+
+                    values = [...icons, ...icons];
+                }
+
+                // for randomizing the array
+                values.sort(() => Math.random() - 0.5);
+
+                for(let i = 0; i < 16; i++) {
+                    toSet.push({
+                        value: values[i],
+                        index: i,
+                        flipped: false,
+                        matched: false
+                    });
                 }
             }
             else {
                 if(theme === 'numbers') {
-                    /* while(nums.length < 16) {
-                        rand = Math.floor(Math.random() * 16);
-
-                        if(!nums.includes(rand)) {
-                            nums.push(rand);
-                        }
-                    } */
-
                     for(let x = 0; x < 16; x++) {
                         nums.push(x);
                     }
 
                     values = [...nums, ...nums];
-
-                    values.sort(() => Math.random() - 0.5);
-
-                    for(let i = 0; i < 32; i++) {
-                        toSet.push({
-                            value: values[i],
-                            index: i,
-                            flipped: false,
-                            matched: false
-                        });
-                    }
                 }
                 else {
-                    // icons
+                    icons = [
+                        ambulance,
+                        bug,
+                        crow,
+                        fish,
+                        fort,
+                        gamepad,
+                        hamburger,
+                        helicopter,
+                        infinity,
+                        magnet,
+                        pizza,
+                        plane,
+                        plug,
+                        screwdriver,
+                        spider,
+                        viruses
+                    ];
+
+                    values = [...icons, ...icons];
+                }
+
+                // for randomizing the array
+                values.sort(() => Math.random() - 0.5);
+
+                for(let i = 0; i < 32; i++) {
+                    toSet.push({
+                        value: values[i],
+                        index: i,
+                        flipped: false,
+                        matched: false
+                    });
                 }
             }
 
@@ -422,6 +454,7 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                     <div className='Gameboard__stats__move-counter__moves'>{moves}</div>
                 </div>
             </div>
+
             <button onClick={() => console.log(firstMove)}>First Move</button>
             <button onClick={() => console.log(secondMove)}>Second Move</button>
             <button onClick={() => console.log(flippedPieces)}>Flipped Pieces</button>

@@ -107,6 +107,11 @@ function App() {
           setStartGame={setStartGame}
         />
       }
+
+      <section className='attribution'>
+        All icons used were created by <a href="https://fontawesome.com/">Font Awesome</a> (<a href="https://creativecommons.org/licenses/by/4.0/">License</a>). No icons were modified.
+      </section>
+      
     </div>
   );
 }
