@@ -194,21 +194,27 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
 
     useEffect(() => {
         /* const f = document.querySelectorAll('.GamePiece__piece--flipped'); */
-        const f = document.querySelectorAll('.flipped');
+        const allFlipped = document.querySelectorAll('.flipped');
         
-        if(f.length === 2){
+        if(allFlipped.length === 2){
             console.log('two pieces');
-            console.log(f[0], f[1]);
+            console.log(allFlipped[0], allFlipped[1]);
         }
 
         if(firstMove.index !== -1 && secondMove.index !== -1) {
             if(firstMove.value === secondMove.value) {
                 console.log('match');
 
-                f.forEach(item => {
+                /* f.forEach(item => {
                     item.classList.add('matched');
                     // item.setAttribute('disabled', '');
-                });
+                }); */
+
+                const fM = document.getElementById(firstMove.index);
+                const sM = document.getElementById(secondMove.index);
+
+                fM.classList.add('matched');
+                sM.classList.add('matched');
 
                 /* console.log(gameState[0]) */
                 gameState[firstMove.index].matched = true;
@@ -223,7 +229,7 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                 console.log('no match');
 
                 setTimeout(() => {
-                    f.forEach(item => {
+                    allFlipped.forEach(item => {
                         if(!item.classList.contains('matched')){
                             item.classList.remove('flipped');
                             item.classList.add('not-flipped');
@@ -368,6 +374,25 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
         } */
     }
 
+    function restartGame() {
+        const restarted = [...boardPieces];
+        const allMatched = document.querySelectorAll('.matched');
+
+        allMatched.forEach(piece => {
+            piece.classList.remove('matched');
+        });
+
+        restarted.forEach(piece => {
+            piece.flipped = false;
+            piece.matched = false;
+        });
+
+        //console.log(restarted)
+
+        setBoardPieces(restarted);
+        toggleOverlay();
+    }
+
     return (
         <div className="Gameboard">
             <div className="Gameboard__header">
@@ -393,8 +418,16 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                 {showMenu && 
                     <div className="Gameboard__header__menu-overlay">
                         <div className="Gameboard__header__menu-overlay__content">
-                            <button className='Gameboard__header__menu-overlay__restart btn btn--restart'>Restart</button>
-                            <button className='Gameboard__header__menu-overlay__new-game btn btn--new-game'>New Game</button>
+                            <button 
+                                className='Gameboard__header__menu-overlay__restart btn btn--restart'
+                                onClick={restartGame}
+                            >Restart</button>
+
+                            <button 
+                                className='Gameboard__header__menu-overlay__new-game btn btn--new-game'
+                                onClick={() => console.log('new game')}
+                            >New Game</button>
+
                             <button 
                                 className='Gameboard__header__menu-overlay__resume btn btn--resume' 
                                 onClick={toggleOverlay}
@@ -426,6 +459,7 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                                 setReset={setReset}
                                 isFlipped={piece.flipped}
                                 isMatched={piece.matched}
+                                theme={theme}
                             />
                         );
                     })}

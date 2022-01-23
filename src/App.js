@@ -6,7 +6,7 @@ import StartMenu from './components/StartMenu/StartMenu';
 import Gameboard from './components/Gameboard/Gameboard';
 
 function App() {
-  const [theme, setTheme] = useState('numbers');
+  const [theme, setTheme] = useState('icons');
   const [numPlayers, setNumPlayers] = useState(1);
   const [gridSize, setGridSize] = useState(4);
   const [startGame, setStartGame] = useState(true);

@@ -47,3 +47,8 @@
     justify-content: center;
     align-items: center;
 }
+
+.GamePiece__content img {
+    height: 60%;
+    object-fit: contain;
+}

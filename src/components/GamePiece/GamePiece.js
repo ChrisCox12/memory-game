@@ -4,7 +4,7 @@ import './GamePiece.css';
 export default function GamePiece({ 
     value, index, firstMove, setFirstMove, 
     secondMove, setSecondMove, assignMove, flippedPieces, setFlippedPieces,
-    unAssignMove, reset, setReset, isFlipped, isMatched }) {
+    unAssignMove, reset, setReset, isFlipped, isMatched, theme }) {
     const [pieceValue, setPieceValue] = useState('');
     const [pieceIndex, setPieceIndex] = useState(-1);
     const [flipped, setFlipped] = useState(false);
@@ -97,6 +97,14 @@ export default function GamePiece({
         }
     } */
 
+    function determineValue() {
+        if(theme === 'numbers') {
+            return pieceValue;
+        }
+        else {
+            return <img src={pieceValue} alt='icon' />;
+        }
+    }
     
 
     return (
@@ -106,8 +114,12 @@ export default function GamePiece({
                 : <div className="GamePiece__piece--not-flipped"></div> */
             }
             <div className="GamePiece__content">
-                {flipped ? 
+                {/* {flipped ? 
                     pieceValue 
+                    : null
+                } */}
+                {flipped ? 
+                    determineValue() 
                     : null
                 }
             </div>
