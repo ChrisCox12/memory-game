@@ -20,7 +20,7 @@ import spider from '../../assets/Font Awesome Icons/spider-solid.svg';
 import viruses from '../../assets/Font Awesome Icons/viruses-solid.svg';
 
 
-export default function Gameboard({ theme, numPlayers, gridSize }) {
+export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, setTheme }) {
     const [moves, setMoves] =  useState(0);
     const [showMenu, setShowMenu] = useState(false);
     const [gameState, setGameState] = useState([]);
@@ -33,9 +33,6 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
     const [minutes, setMinutes] = useState(0);
     const [active, setActive] = useState(false);
     const [boardPieces, setBoardPieces] = useState([]);
-    /* const [boardPieces, setBoardPieces] = useState(
-        generateBoardPieces()
-    ); */
 
     /*
         gamesState: 
@@ -148,8 +145,10 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
     }, []);
 
     useEffect(() => {
+        let timeout1;
+
         if(active) {
-            setTimeout(() => {
+            timeout1 = setTimeout(() => {
                 if(seconds === 59) {
                     const nM = minutes + 1;
                     setSeconds(0);
@@ -169,46 +168,24 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                     moves: moves
                 };
 
-                localStorage.setItem('gameState', JSON.stringify(gameStateToSave))
-            }, 1000);
-        } 
-        
+                localStorage.setItem('gameState', JSON.stringify(gameStateToSave));
+            }, 1000);    
+        }
+
+        //  Used for cleaning up the timeout
+        return () => {
+            clearTimeout(timeout1);
+        };
+           
     }, [seconds, minutes, active, gameState, moves]);
 
-    /* useEffect(() => {
-        // console.log(`effect: ${boardPieces}`)
-        let state = [];
-
-        boardPieces.forEach((piece, index) => {
-            state.push({
-                value: piece,
-                index: index,
-                flipped: false,
-                matched: false
-            });
-        });
-        // console.log(`state: ${JSON.stringify(state)}`)
-        setGameState(state);
-        // console.log(`Game state: ${JSON.stringify(state)}`)
-    }, [boardPieces]); */
-
     useEffect(() => {
-        /* const f = document.querySelectorAll('.GamePiece__piece--flipped'); */
+        let timeout2;
         const allFlipped = document.querySelectorAll('.flipped');
-        
-        if(allFlipped.length === 2){
-            console.log('two pieces');
-            console.log(allFlipped[0], allFlipped[1]);
-        }
 
         if(firstMove.index !== -1 && secondMove.index !== -1) {
             if(firstMove.value === secondMove.value) {
-                console.log('match');
-
-                /* f.forEach(item => {
-                    item.classList.add('matched');
-                    // item.setAttribute('disabled', '');
-                }); */
+                //console.log('match');
 
                 const fM = document.getElementById(firstMove.index);
                 const sM = document.getElementById(secondMove.index);
@@ -216,19 +193,15 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                 fM.classList.add('matched');
                 sM.classList.add('matched');
 
-                /* console.log(gameState[0]) */
                 gameState[firstMove.index].matched = true;
                 gameState[secondMove.index].matched = true;
                 gameState[firstMove.index].flipped = true;
                 gameState[secondMove.index].flipped = true;
-                /* boardPieces[firstMove.index].matched = true;
-                boardPieces[secondMove.index].matched = true; */
             }
             else {
+                //console.log('no match');
 
-                console.log('no match');
-
-                setTimeout(() => {
+                timeout2 = setTimeout(() => {
                     allFlipped.forEach(item => {
                         if(!item.classList.contains('matched')){
                             item.classList.remove('flipped');
@@ -240,76 +213,14 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
                     setFirstMove({value: -1, index: -1});
                     setSecondMove({value: -1, index: -1});
                 }, 1500);
-                
-                /* f.forEach(item => {
-                    console.log(item)
-                    item.classList.remove('flipped');
-                    item.classList.add('not-flipped')
-                    setReset(true);
-                }); */
             }
         }
-        /* console.log(f[0]) */
 
+        return () => {
+            clearTimeout(timeout2);
+        };
     }, [firstMove, secondMove, gameState]);
 
-    /* function generateBoardPieces() {
-        if(gridSize === 4) {
-            return generatePieces4();
-        }
-        else {
-            return generatePieces6();
-        }
-    } */
-
-    /* function generatePieces4() {
-        let toReturn = [];
-
-        if(theme === 'numbers') {
-            let nums = [];
-            
-            while(nums.length < 8) {
-                let rand = Math.floor(Math.random() * 8);
-
-                if(!nums.includes(rand)) {
-                    nums.push(rand);
-                }
-            }
-
-            toReturn = [...nums, ...nums];
-
-            // for randomizing the array
-            toReturn.sort(() => Math.random() - 0.5);
-        }
-
-
-        console.log(`toReturn: ${toReturn}`)
-        return toReturn;
-    } */
-
-    /* function generatePieces6() {
-        let toReturn = [];
-
-        if(theme === 'numbers') {
-            let nums = [];
-            
-            while(nums.length < 16) {
-                let rand = Math.floor(Math.random() * 16);
-
-                if(!nums.includes(rand)) {
-                    nums.push(rand);
-                }
-            }
-
-            toReturn = [...nums, ...nums];
-
-            // for randomizing the array
-            toReturn.sort(() => Math.random() - 0.5);
-        }
-
-        console.log(`toReturn: ${toReturn}`)
-        return toReturn;
-    } */
 
     function toggleOverlay() {
         setShowMenu(!showMenu);
@@ -337,41 +248,12 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
         if(!active){
             setActive(true);
         }
-        /* if(firstMove.value === -1) {
-            setFirstMove(move);
-            console.log('first move: ' , move);
-        }
-        else if(firstMove !== null && secondMove === null) {
-            setSecondMove(move);
-            console.log('second move: ', move);
-        } */
-        
-        
-
-        /* checkForMatch(); */
     }
 
     function unAssignMove(move) {
         if(firstMove === move) {
             setFirstMove(null);
         }
-    }
-
-    function checkForMatch() {
-        console.log('checking');
-
-        if(firstMove.index !== -1 && secondMove.index !== -1) {
-            if(firstMove.value === secondMove.value) {
-                console.log('match');
-            }
-            else {
-                console.log('no match');
-            }
-        }
-        /* console.log(`flipped pieces: ${flippedPieces}`) */
-        /* if(flippedPieces.length === 2) {
-
-        } */
     }
 
     function restartGame() {
@@ -390,8 +272,18 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
         //console.log(restarted)
 
         setBoardPieces(restarted);
+        setMinutes(0);
+        setSeconds(0);
+        setMoves(0);
         toggleOverlay();
     }
+
+    function startNewGame() {
+        localStorage.removeItem('gameState');
+        setTheme('numbers');
+        setStartGame(false);
+    }
+
 
     return (
         <div className="Gameboard">
@@ -425,7 +317,7 @@ export default function Gameboard({ theme, numPlayers, gridSize }) {
 
                             <button 
                                 className='Gameboard__header__menu-overlay__new-game btn btn--new-game'
-                                onClick={() => console.log('new game')}
+                                onClick={startNewGame}
                             >New Game</button>
 
                             <button 
