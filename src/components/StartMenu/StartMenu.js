@@ -68,11 +68,11 @@ export default function StartMenu({ setTheme, setGridSize, setNumPlayers, setSta
         const grid_6 = document.getElementById('grid_6');
     
         switch(size) {
-          case '4x4':
+          case 4:
             grid_4.classList.add('selected');
             grid_6.classList.remove('selected');
             break;
-          case '6x6':
+          case 6:
             grid_4.classList.remove('selected');
             grid_6.classList.add('selected');
             break;
@@ -148,7 +148,7 @@ export default function StartMenu({ setTheme, setGridSize, setNumPlayers, setSta
                         <button 
                             className='btn btn--grid' 
                             id='grid_6' 
-                            onClick={() =>changeGridSize(6)}
+                            onClick={() => changeGridSize(6)}
                         >6x6</button>
                     </div>
                 </div>

@@ -11,16 +11,18 @@ import gamepad from '../../assets/Font Awesome Icons/gamepad-solid.svg';
 import hamburger from '../../assets/Font Awesome Icons/hamburger-solid.svg';
 import helicopter from '../../assets/Font Awesome Icons/helicopter-solid.svg';
 import infinity from '../../assets/Font Awesome Icons/infinity-solid.svg';
+import key from '../../assets/Font Awesome Icons/key-solid.svg'; 
 import magnet from '../../assets/Font Awesome Icons/magnet-solid.svg';
 import pizza from '../../assets/Font Awesome Icons/pizza-slice-solid.svg';
 import plane from '../../assets/Font Awesome Icons/plane-solid.svg';
 import plug from '../../assets/Font Awesome Icons/plug-solid.svg';
 import screwdriver from '../../assets/Font Awesome Icons/screwdriver-solid.svg';
 import spider from '../../assets/Font Awesome Icons/spider-solid.svg';
+import tv from '../../assets/Font Awesome Icons/tv-solid.svg';
 import viruses from '../../assets/Font Awesome Icons/viruses-solid.svg';
 
 
-export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, setTheme }) {
+export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, setTheme, setNumPlayers, setGridSize }) {
     const [moves, setMoves] =  useState(0);
     const [showMenu, setShowMenu] = useState(false);
     const [gameState, setGameState] = useState([]);
@@ -68,14 +70,10 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
                 }
                 else {
                     icons = [
-                        ambulance,
-                        bug,
-                        crow,
-                        fish,
-                        fort,
-                        gamepad,
-                        hamburger,
-                        helicopter
+                        ambulance, bug,
+                        crow, fish,
+                        fort, gamepad,
+                        hamburger, helicopter
                     ];
 
                     values = [...icons, ...icons];
@@ -95,7 +93,7 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
             }
             else {
                 if(theme === 'numbers') {
-                    for(let x = 0; x < 16; x++) {
+                    for(let x = 0; x < 18; x++) {
                         nums.push(x);
                     }
 
@@ -103,22 +101,15 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
                 }
                 else {
                     icons = [
-                        ambulance,
-                        bug,
-                        crow,
-                        fish,
-                        fort,
-                        gamepad,
-                        hamburger,
-                        helicopter,
-                        infinity,
-                        magnet,
-                        pizza,
-                        plane,
-                        plug,
-                        screwdriver,
-                        spider,
-                        viruses
+                        ambulance, bug,
+                        crow, fish,
+                        fort, gamepad,
+                        hamburger, helicopter,
+                        infinity, key,
+                        magnet, pizza, 
+                        plane, plug, 
+                        screwdriver, tv,
+                        spider, viruses
                     ];
 
                     values = [...icons, ...icons];
@@ -127,7 +118,7 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
                 // for randomizing the array
                 values.sort(() => Math.random() - 0.5);
 
-                for(let i = 0; i < 32; i++) {
+                for(let i = 0; i < 36; i++) {
                     toSet.push({
                         value: values[i],
                         index: i,
@@ -281,6 +272,8 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
     function startNewGame() {
         localStorage.removeItem('gameState');
         setTheme('numbers');
+        setNumPlayers(1);
+        setGridSize(4);
         setStartGame(false);
     }
 
@@ -359,7 +352,30 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
             }
 
             {gridSize === 6 && 
-                <div>6x6 grid</div>
+                <div className='Gameboard__board board--6x6'>
+                    {boardPieces.map((piece, index) => {
+                        return (
+                            <GamePiece 
+                                value={piece.value} 
+                                key={index} 
+                                index={index}
+                                firstMove={firstMove}
+                                setFirstMove={setFirstMove}
+                                secondMove={secondMove}
+                                setSecondMove={setSecondMove}
+                                assignMove={assignMove}
+                                flippedPieces={flippedPieces}
+                                setFlippedPieces={setFlippedPieces}
+                                unAssignMove={unAssignMove}
+                                reset={reset}
+                                setReset={setReset}
+                                isFlipped={piece.flipped}
+                                isMatched={piece.matched}
+                                theme={theme}
+                            />
+                        );
+                    })}
+                </div>
             }
 
             <div className='Gameboard__stats'>
