@@ -35,6 +35,7 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
     const [minutes, setMinutes] = useState(0);
     const [active, setActive] = useState(false);
     const [boardPieces, setBoardPieces] = useState([]);
+    const [playerScores, setPlayerScores] = useState([0, 1, 2, 3]);
 
     /*
         gamesState: 
@@ -173,38 +174,42 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
     useEffect(() => {
         let timeout2;
         const allFlipped = document.querySelectorAll('.flipped');
+        const gameBoard = document.querySelector('.Gameboard__board');
 
         if(firstMove.index !== -1 && secondMove.index !== -1) {
-            if(firstMove.value === secondMove.value) {
-                //console.log('match');
+            gameBoard.classList.add('no-click');
 
-                const fM = document.getElementById(firstMove.index);
-                const sM = document.getElementById(secondMove.index);
+            timeout2 = setTimeout(() => {
+                if(firstMove.value === secondMove.value) {
+                    //console.log('match');
 
-                fM.classList.add('matched');
-                sM.classList.add('matched');
+                    const fM = document.getElementById(firstMove.index);
+                    const sM = document.getElementById(secondMove.index);
 
-                gameState[firstMove.index].matched = true;
-                gameState[secondMove.index].matched = true;
-                gameState[firstMove.index].flipped = true;
-                gameState[secondMove.index].flipped = true;
-            }
-            else {
-                //console.log('no match');
+                    fM.classList.add('matched');
+                    sM.classList.add('matched');
 
-                timeout2 = setTimeout(() => {
+                    gameState[firstMove.index].matched = true;
+                    gameState[secondMove.index].matched = true;
+                    gameState[firstMove.index].flipped = true;
+                    gameState[secondMove.index].flipped = true;
+                }
+                else {
+                    //console.log('no match');
+
                     allFlipped.forEach(item => {
-                        if(!item.classList.contains('matched')){
+                        if(!item.classList.contains('matched')) {
                             item.classList.remove('flipped');
                             item.classList.add('not-flipped');
-                            
                         }
                     });
                     setReset(true);
                     setFirstMove({value: -1, index: -1});
                     setSecondMove({value: -1, index: -1});
-                }, 1500);
-            }
+                }
+
+                gameBoard.classList.remove('no-click');
+            }, 1500);
         }
 
         return () => {
@@ -379,22 +384,49 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
             }
 
             <div className='Gameboard__stats'>
-                <div className='Gameboard__stats__time-counter'>
-                    <div className='Gameboard__stats__time-counter__title'>Time</div>
+                {numPlayers === 1 ?
+                    <>
+                        <div className='Gameboard__stats__time-counter'>
+                            <div className='Gameboard__stats__time-counter__title'>Time</div>
 
-                    <div className='Gameboard__stats__time-counter__time'>
-                        {minutes > 0 ? 
-                            <>{minutes}:{seconds}</> 
-                            : <>{seconds}</>
-                        }
-                    </div>
-                </div>
+                            <div className='Gameboard__stats__time-counter__time'>
+                                {minutes > 0 ? 
+                                    <>{minutes}:{seconds}</> 
+                                    : 
+                                    <>{seconds}</>
+                                }
+                            </div>
+                        </div>
 
-                <div className='Gameboard__stats__move-counter'>
-                    <div className='Gameboard__stats__move-counter__title'>Moves</div>
+                        <div className='Gameboard__stats__move-counter'>
+                            <div className='Gameboard__stats__move-counter__title'>Moves</div>
 
-                    <div className='Gameboard__stats__move-counter__moves'>{moves}</div>
-                </div>
+                            <div className='Gameboard__stats__move-counter__moves'>{moves}</div>
+                        </div>
+                    </>
+                    : 
+                    <>
+                        <div className='Gameboard__stats__player-scores'>
+                                {playerScores.map((playerScore, index) => {
+                                    let playerString = 'player_' + index;
+                                    let playerNum = index + 1;
+
+                                    return (
+                                        <div key={playerString}>
+                                            <div className='Gameboard__stats__player-scores__player'>
+                                                P{playerNum}
+                                            </div>
+
+                                            <div className='Gameboard__stats__player-scores__player-score'>
+                                                {playerScore}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    </> 
+                }
+                
             </div>
 
             <button onClick={() => console.log(firstMove)}>First Move</button>

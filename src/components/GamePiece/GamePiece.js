@@ -15,25 +15,18 @@ export default function GamePiece({
         setPieceIndex(index);
         setFlipped(isFlipped);
         setPieceMatched(isMatched);
-        /* console.log(`piece value: ${value}`); */
-        /* console.log(`value: ${value}, index: ${index}`) */
     }, [value, index, isFlipped, isMatched]);
 
 
     useEffect(() => {
         const toFlip = document.getElementById(index);
 
-
         if(flipped) {
-            /* console.log('toFlip: ', toFlip);
-            console.log('flipped'); */
-
             toFlip.classList.remove('not-flipped');
             toFlip.classList.add('flipped');
         }
         else {
             if(toFlip.classList.contains('flipped')){
-                /* console.log('contains') */
                 toFlip.classList.remove('flipped');
                 toFlip.classList.add('not-flipped');    
             }
@@ -46,7 +39,6 @@ export default function GamePiece({
     }, [flipped, pieceIndex, index, pieceMatched]);
 
     useEffect(() => {
-        /* const toReset = document.querySelectorAll('.flipped'); */
         const toReset = document.getElementById(pieceIndex);
 
         if(reset) {
@@ -57,45 +49,14 @@ export default function GamePiece({
         }
     }, [reset, setReset, pieceIndex]);
 
-    /* useEffect(() => {
-        const f = document.querySelectorAll('.GamePiece__piece--flipped');
-        
-        if(f.length === 2){
-            console.log('two pieces')
-            console.log(f[0], f[1])
-        }
-    }, [flipped, pieceIndex]); */
-
 
     function flipPiece() {
         setFlipped(!flipped);
-        /* console.log('flipped: ', flipped) */
-        /* console.log(`card clicked: ${e.target}`);
-        console.log(e.target); */
-
-        /* assignMoves(); */
         assignMove({
             value: pieceValue,
             index: pieceIndex,
         });
     }
-
-    /* function assignMoves() {
-        if(firstMove === null){
-            console.log('null first move')
-            setFirstMove({
-                value: pieceValue,
-                pieceIndex: pieceIndex
-            });
-        }
-        else{
-            console.log('first move not null')
-            setSecondMove({
-                value: pieceValue,
-                pieceIndex: pieceIndex
-            });
-        }
-    } */
 
     function determineValue() {
         if(theme === 'numbers') {
@@ -109,15 +70,7 @@ export default function GamePiece({
 
     return (
         <div className="GamePiece not-flipped" onClick={flipPiece} id={index}>
-            {/* flipped ? 
-                <div className="GamePiece__piece--flipped">{pieceValue}</div> 
-                : <div className="GamePiece__piece--not-flipped"></div> */
-            }
             <div className="GamePiece__content">
-                {/* {flipped ? 
-                    pieceValue 
-                    : null
-                } */}
                 {flipped ? 
                     determineValue() 
                     : null

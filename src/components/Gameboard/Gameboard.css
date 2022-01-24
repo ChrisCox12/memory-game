@@ -17,9 +17,12 @@
 }
 
 .Gameboard__stats {
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 10px;
+    column-gap: 10px; */
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .Gameboard__stats__time-counter, 
@@ -28,6 +31,13 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+.Gameboard__stats__player-scores {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
 }
 
 .board--4x4 {
@@ -67,6 +77,10 @@
 }
 
 .matched {
+    pointer-events: none;
+}
+
+.no-click {
     pointer-events: none;
 }
 

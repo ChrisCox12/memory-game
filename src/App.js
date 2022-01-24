@@ -6,8 +6,8 @@ import Gameboard from './components/Gameboard/Gameboard';
 function App() {
   const [theme, setTheme] = useState('numbers');
   const [numPlayers, setNumPlayers] = useState(1);
-  const [gridSize, setGridSize] = useState(6);
-  const [startGame, setStartGame] = useState(true);
+  const [gridSize, setGridSize] = useState(4);
+  const [startGame, setStartGame] = useState(false);
 
 
   return (
