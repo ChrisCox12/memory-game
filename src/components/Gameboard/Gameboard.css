@@ -22,7 +22,11 @@
     column-gap: 10px; */
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
+}
+
+.Gameboard__stats div {
+    border-radius: 5px;
 }
 
 .Gameboard__stats__time-counter, 
@@ -31,13 +35,60 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    width: 48%;
 }
 
 .Gameboard__stats__player-scores {
-    display: flex;
+    /* display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-evenly; */
     width: 100%;
+    display: grid;
+    column-gap: 10px;
+}
+
+.Gameboard__stats__player-scores > div,
+.Gameboard__stats__time-counter,
+.Gameboard__stats__move-counter {
+    background-color: var(--blue-5);
+    text-align: center;
+}
+
+.Gameboard__stats__time-counter__title,
+.Gameboard__stats__time-counter__time,
+.Gameboard__stats__move-counter__title,
+.Gameboard__stats__move-counter__moves,
+.Gameboard__stats__player-scores__player,
+.Gameboard__stats__player-scores__player-score {
+    font-weight: bold;
+}
+
+.Gameboard__stats__time-counter__title,
+.Gameboard__stats__move-counter__title,
+.Gameboard__stats__player-scores__player {
+    color: var(--blue-3);
+}
+
+.Gameboard__stats__time-counter__time,
+.Gameboard__stats__move-counter__moves,
+.Gameboard__stats__player-scores__player-score {
+    color: var(--blue-2);
+}
+
+.single-player {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.two-player {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.three-player {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.four-player {
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .board--4x4 {
@@ -78,10 +129,15 @@
 
 .matched {
     pointer-events: none;
+    background-color: var(--blue-5);
 }
 
 .no-click {
     pointer-events: none;
+}
+
+.testing {
+    background-color: red !important;
 }
 
 

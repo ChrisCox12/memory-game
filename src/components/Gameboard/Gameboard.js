@@ -25,40 +25,72 @@ import viruses from '../../assets/Font Awesome Icons/viruses-solid.svg';
 export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, setTheme, setNumPlayers, setGridSize }) {
     const [moves, setMoves] =  useState(0);
     const [showMenu, setShowMenu] = useState(false);
-    const [gameState, setGameState] = useState([]);
     const [firstMove, setFirstMove] = useState({ value: -1, index: -1 });
     const [secondMove, setSecondMove] = useState({ value: -1, index: -1 });
     const [reset, setReset] = useState(false);
-    const [flippedPieces, setFlippedPieces] = useState(0);
-    const [score, setScore] = useState(0);
     const [seconds, setSeconds] = useState(0);
     const [minutes, setMinutes] = useState(0);
     const [active, setActive] = useState(false);
     const [boardPieces, setBoardPieces] = useState([]);
-    const [playerScores, setPlayerScores] = useState([0, 1, 2, 3]);
-
-    /*
-        gamesState: 
-            boardPieces: []
-            time: number
-            moves: number
-    */
+    const [playerScores, setPlayerScores] = useState([]);
+    const [currentPlayer, setCurrentPlayer] = useState(0);
+    const [nextPlayer, setNextPlayer] = useState(1);
+    
 
     useEffect(() => {
         const storedGameState = JSON.parse( localStorage.getItem('gameState') );
+        const gameBoardStats = document.querySelector('.Gameboard__stats__player-scores');
 
         if(storedGameState !== null) {
-            setBoardPieces(storedGameState.gameState);
-            setMoves(storedGameState.moves);
-            setMinutes(storedGameState.time.minutes);
-            setSeconds(storedGameState.time.seconds);
-            setGameState(storedGameState.gameState);
+            if(numPlayers > 1) {
+                setCurrentPlayer(storedGameState.currentPlayer);
+                setNextPlayer(storedGameState.nextPlayer);
+                setPlayerScores(storedGameState.playerScores);
+
+                switch(numPlayers) {
+                    case 2:
+                        gameBoardStats.classList.add('two-player');
+                        break;
+                    case 3:
+                        gameBoardStats.classList.add('three-player');
+                        break;
+                    case 4:
+                        gameBoardStats.classList.add('four-player');
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else {
+                setMoves(storedGameState.moves);
+                setMinutes(storedGameState.time.minutes);
+                setSeconds(storedGameState.time.seconds);
+            }
+
+            setBoardPieces(storedGameState.boardPieces);
         }
         else {
             let values = [];
             let toSet = [];
             let nums = [];
             let icons = [];
+
+            switch(numPlayers) {
+                case 2:
+                    gameBoardStats.classList.add('two-player');
+                    setPlayerScores([0, 0]);
+                    break;
+                case 3:
+                    gameBoardStats.classList.add('three-player');
+                    setPlayerScores([0, 0, 0]);
+                    break;
+                case 4:
+                    gameBoardStats.classList.add('four-player');
+                    setPlayerScores([0, 0, 0, 0]);
+                    break;
+                default:
+                    break;
+            }
 
             // generate state 
             if(gridSize === 4) {
@@ -130,51 +162,72 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
             }
 
             setBoardPieces(toSet);
-            setGameState(toSet);
         }
 
         console.log('stored game state: ', storedGameState)
+        console.log(document.querySelectorAll('.Gameboard__stats__player-scores > div'));
+
     }, []);
 
     useEffect(() => {
         let timeout1;
+        let gameStateToSave;
 
         if(active) {
             timeout1 = setTimeout(() => {
-                if(seconds === 59) {
-                    const nM = minutes + 1;
-                    setSeconds(0);
-                    setMinutes(nM);
+                if(numPlayers > 1) {
+                    gameStateToSave = {
+                        boardPieces: boardPieces,
+                        playerScores: playerScores,
+                        currentPlayer: currentPlayer,
+                        nextPlayer: nextPlayer,
+                        numPlayers: numPlayers,
+                        gridSize: gridSize,
+                        theme: theme
+                    };
                 }
                 else {
-                    const nS = seconds + 1;
-                    setSeconds(nS);
+                    if(seconds === 59) {
+                        const nM = minutes + 1;
+                        setSeconds(0);
+                        setMinutes(nM);
+                    }
+                    else {
+                        const nS = seconds + 1;
+                        setSeconds(nS);
+                    }
+
+                    gameStateToSave = {
+                        boardPieces: boardPieces,
+                        time: {
+                            minutes: minutes,
+                            seconds: seconds
+                        },
+                        moves: moves,
+                        numPlayers: numPlayers,
+                        gridSize: gridSize,
+                        theme: theme
+                    };
                 }
-
-                const gameStateToSave = {
-                    gameState: gameState,
-                    time: {
-                        minutes: minutes,
-                        seconds: seconds
-                    },
-                    moves: moves
-                };
-
+                
                 localStorage.setItem('gameState', JSON.stringify(gameStateToSave));
-            }, 1000);    
+            }, 1000);
         }
+
 
         //  Used for cleaning up the timeout
         return () => {
             clearTimeout(timeout1);
         };
            
-    }, [seconds, minutes, active, gameState, moves]);
+    }, [seconds, minutes, active, boardPieces, moves, playerScores, currentPlayer, nextPlayer, numPlayers, gridSize, theme]);
 
     useEffect(() => {
         let timeout2;
         const allFlipped = document.querySelectorAll('.flipped');
         const gameBoard = document.querySelector('.Gameboard__board');
+        const fM = document.getElementById(firstMove.index);
+        const sM = document.getElementById(secondMove.index);
 
         if(firstMove.index !== -1 && secondMove.index !== -1) {
             gameBoard.classList.add('no-click');
@@ -183,16 +236,20 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
                 if(firstMove.value === secondMove.value) {
                     //console.log('match');
 
-                    const fM = document.getElementById(firstMove.index);
-                    const sM = document.getElementById(secondMove.index);
-
                     fM.classList.add('matched');
                     sM.classList.add('matched');
 
-                    gameState[firstMove.index].matched = true;
-                    gameState[secondMove.index].matched = true;
-                    gameState[firstMove.index].flipped = true;
-                    gameState[secondMove.index].flipped = true;
+                    boardPieces[firstMove.index].matched = true;
+                    boardPieces[secondMove.index].matched = true;
+                    boardPieces[firstMove.index].flipped = true;
+                    boardPieces[secondMove.index].flipped = true;
+
+                    if(numPlayers > 1){
+                        let scoreArray = [...playerScores];
+                        let newScore = scoreArray[currentPlayer] + 1;
+                        scoreArray[currentPlayer] = newScore;
+                        setPlayerScores(scoreArray);
+                    }
                 }
                 else {
                     //console.log('no match');
@@ -204,18 +261,41 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
                         }
                     });
                     setReset(true);
-                    setFirstMove({value: -1, index: -1});
-                    setSecondMove({value: -1, index: -1});
                 }
 
+                setFirstMove({value: -1, index: -1});
+                setSecondMove({value: -1, index: -1});
+
                 gameBoard.classList.remove('no-click');
+
+                if(numPlayers > 1) {
+                    const players = document.querySelectorAll('.Gameboard__stats__player-scores > div');
+
+                    if(currentPlayer === (players.length - 1)) {
+                        players[currentPlayer].classList.remove('testing');
+                        players[0].classList.add('testing');
+
+                        setCurrentPlayer(0);
+                        setNextPlayer(1);
+                    }
+                    else {
+                        players[currentPlayer].classList.remove('testing');
+                        players[nextPlayer].classList.add('testing');
+
+                        let curr = currentPlayer + 1;
+                        let next = nextPlayer + 1;
+
+                        setCurrentPlayer(curr);
+                        setNextPlayer(next);
+                    }
+                }
             }, 1500);
         }
 
         return () => {
             clearTimeout(timeout2);
         };
-    }, [firstMove, secondMove, gameState]);
+    }, [firstMove, secondMove, boardPieces, currentPlayer, nextPlayer, numPlayers, playerScores]);
 
 
     function toggleOverlay() {
@@ -246,12 +326,6 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
         }
     }
 
-    function unAssignMove(move) {
-        if(firstMove === move) {
-            setFirstMove(null);
-        }
-    }
-
     function restartGame() {
         const restarted = [...boardPieces];
         const allMatched = document.querySelectorAll('.matched');
@@ -265,12 +339,24 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
             piece.matched = false;
         });
 
-        //console.log(restarted)
+        if(numPlayers > 1) {
+            let defaultScores = [...playerScores];
+            
+            for(let i = 0; i < defaultScores.length; i++) {
+                defaultScores[i] = 0;
+            }
+            
+            setPlayerScores(defaultScores);
+            setCurrentPlayer(0);
+            setNextPlayer(1);
+        }
+        else {
+            setMinutes(0);
+            setSeconds(0);
+            setMoves(0); 
+        }
 
         setBoardPieces(restarted);
-        setMinutes(0);
-        setSeconds(0);
-        setMoves(0);
         toggleOverlay();
     }
 
@@ -337,14 +423,7 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
                                 value={piece.value} 
                                 key={index} 
                                 index={index}
-                                firstMove={firstMove}
-                                setFirstMove={setFirstMove}
-                                secondMove={secondMove}
-                                setSecondMove={setSecondMove}
                                 assignMove={assignMove}
-                                flippedPieces={flippedPieces}
-                                setFlippedPieces={setFlippedPieces}
-                                unAssignMove={unAssignMove}
                                 reset={reset}
                                 setReset={setReset}
                                 isFlipped={piece.flipped}
@@ -364,14 +443,7 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
                                 value={piece.value} 
                                 key={index} 
                                 index={index}
-                                firstMove={firstMove}
-                                setFirstMove={setFirstMove}
-                                secondMove={secondMove}
-                                setSecondMove={setSecondMove}
                                 assignMove={assignMove}
-                                flippedPieces={flippedPieces}
-                                setFlippedPieces={setFlippedPieces}
-                                unAssignMove={unAssignMove}
                                 reset={reset}
                                 setReset={setReset}
                                 isFlipped={piece.flipped}
@@ -431,9 +503,7 @@ export default function Gameboard({ theme, numPlayers, gridSize, setStartGame, s
 
             <button onClick={() => console.log(firstMove)}>First Move</button>
             <button onClick={() => console.log(secondMove)}>Second Move</button>
-            <button onClick={() => console.log(flippedPieces)}>Flipped Pieces</button>
             <button onClick={() => console.log(reset)}>Reset</button>
-            <button onClick={() => console.log(gameState)}>GameState</button>
             <button onClick={() => console.log(boardPieces)}>BoardPieces</button>
         </div>
     )

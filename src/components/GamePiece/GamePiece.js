@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './GamePiece.css';
 
-export default function GamePiece({ 
-    value, index, firstMove, setFirstMove, 
-    secondMove, setSecondMove, assignMove, flippedPieces, setFlippedPieces,
-    unAssignMove, reset, setReset, isFlipped, isMatched, theme }) {
+export default function GamePiece({ value, index, assignMove, reset, setReset, isFlipped, isMatched, theme }) {
     const [pieceValue, setPieceValue] = useState('');
     const [pieceIndex, setPieceIndex] = useState(-1);
     const [flipped, setFlipped] = useState(false);
